@@ -6,7 +6,7 @@ Created on Sat Jul 15 18:02:42 2017
 @author: abhik
 """
 
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from os import listdir
 from os.path import isfile,join
@@ -26,6 +26,9 @@ trainFolder = './data/'
 
 Modi = trainFolder+'Modi/'
 Raga= trainFolder+'Raga/'
+Kohli= trainFolder+'Kohli/'
+Salman = trainFolder + 'Salman/'
+
 Test = trainFolder +'Test/'
 trainData = []
 responseData = []
@@ -33,7 +36,10 @@ testData = []
 NumberList = []
 ModiImages = [ f for f in listdir(Modi) if isfile(join(Modi,f)) ]
 RagaImages = [ f for f in listdir(Raga) if isfile(join(Raga,f)) ]
-TestImages = [ f for f in listdir(Test) if isfile(join(Test,f)) ]
+KohliImages = [ f for f in listdir(Kohli) if isfile(join(Kohli,f)) ]
+SalmanImages = [ f for f in listdir(Salman) if isfile(join(Salman,f)) ]
+
+
 
 def ReadImages(ListName,FolderName,Label):
     global NumberList
@@ -66,23 +72,32 @@ def num2name(num):
         name = 'Modi'
     elif num ==1:
         name = 'Raga'
+    elif num ==2:
+        name = 'Kohli'
+    elif num==3:
+        name = 'Salman'
     return name
 
 
 ReadImages(ModiImages,Modi,0)
 ReadImages(RagaImages,Raga,1)
+ReadImages(KohliImages,Kohli,2)
+ReadImages(SalmanImages,Salman,3)
+
 
 svm = NuSVC()
-nu_options = np.arange(0.2,1)
+nu_options = np.arange(0.1,1)
 kernel_options = ['linear','rbf']
 param_grid= dict(kernel=kernel_options,nu = nu_options)
 gridSVM = GridSearchCV(svm,param_grid,scoring = 'accuracy')
 X = np.float32(trainData)
 y = np.float32(responseData)
 gridSVM.fit(X,y)
-print gridSVM.best_score_
+print(gridSVM.best_score_)
+print(gridSVM.best_estimator_)
 face_cascade =cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
+TestImages = [ f for f in listdir(Test) if isfile(join(Test,f)) ]
 for image in TestImages:
     img = cv2.imread(join(Test,image))
     imgray=cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
