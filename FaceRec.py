@@ -24,15 +24,16 @@ from sklearn.svm import SVC,NuSVC
 
 trainFolder = './data/' 
 
-Modi = trainFolder+'Modi'
-Raga= trainFolder+'Raga'
-
+Modi = trainFolder+'Modi/'
+Raga= trainFolder+'Raga/'
+Test = trainFolder +'Test/'
 trainData = []
 responseData = []
 testData = []
 NumberList = []
 ModiImages = [ f for f in listdir(Modi) if isfile(join(Modi,f)) ]
 RagaImages = [ f for f in listdir(Raga) if isfile(join(Raga,f)) ]
+TestImages = [ f for f in listdir(Test) if isfile(join(Test,f)) ]
 
 def ReadImages(ListName,FolderName,Label):
     global NumberList
@@ -63,19 +64,19 @@ def ReadImages(ListName,FolderName,Label):
 def num2name(num):
     if num==0:
         name = 'Modi'
-    elif num ==2:
+    elif num ==1:
         name = 'Raga'
     return name
 
 
 ReadImages(ModiImages,Modi,0)
-ReadImages(RagaImages,Raga,5)
+ReadImages(RagaImages,Raga,1)
 
 svm = NuSVC()
 nu_options = np.arange(0.2,1)
 kernel_options = ['linear','rbf']
 param_grid= dict(kernel=kernel_options,nu = nu_options)
-gridSVM = GridSearchCV(svm,param_grid,scoring = 'accuracy',cv=10)
+gridSVM = GridSearchCV(svm,param_grid,scoring = 'accuracy')
 X = np.float32(trainData)
 y = np.float32(responseData)
 gridSVM.fit(X,y)
