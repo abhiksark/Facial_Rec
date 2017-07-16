@@ -24,33 +24,47 @@ from sklearn.svm import SVC,NuSVC
 
 trainFolder = './data/' 
 
+###############################################################################
 Modi = trainFolder+'Modi/'
 Raga= trainFolder+'Raga/'
 Kohli= trainFolder+'Kohli/'
-Salman = trainFolder + 'Salman/'
+Salman =  trainFolder+'Salman/'
+Gal = trainFolder +'Gal/'
+Musk =  trainFolder+'Musk/'
+Sandberg =  trainFolder+'Sandberg/'
+Salman =  trainFolder+'Salman/'
+Saina =  trainFolder+'Saina/'
+Priyanka =trainFolder+'Priyanka/'
 
 Test = trainFolder +'Test/'
 trainData = []
 responseData = []
 testData = []
 NumberList = []
+
+###############################################################################
 ModiImages = [ f for f in listdir(Modi) if isfile(join(Modi,f)) ]
 RagaImages = [ f for f in listdir(Raga) if isfile(join(Raga,f)) ]
 KohliImages = [ f for f in listdir(Kohli) if isfile(join(Kohli,f)) ]
 SalmanImages = [ f for f in listdir(Salman) if isfile(join(Salman,f)) ]
+SainaImages = [ f for f in listdir(Saina) if isfile(join(Saina,f)) ]
+SandbergImages = [ f for f in listdir(Sandberg) if isfile(join(Sandberg,f)) ]
+GalImages = [ f for f in listdir(Gal) if isfile(join(Gal,f)) ]
+MuskImages = [ f for f in listdir(Musk) if isfile(join(Musk,f)) ]
+PriyankaImages = [ f for f in listdir(Priyanka) if isfile(join(Priyanka,f)) ]
 
-
+###############################################################################
 
 def ReadImages(ListName,FolderName,Label):
-    global NumberList
+    #global NumberList
     global responseData
     global trainData
-    global hog
-    global cv2
-    global imutils
-    global winSize
+    #global hog
+    #global cv2
+    #global imutils
+    #global winSize
     global testData
-    global os
+    #global os
     
    
     global feature 
@@ -76,6 +90,16 @@ def num2name(num):
         name = 'Kohli'
     elif num==3:
         name = 'Salman'
+    elif num ==4:
+        name = 'Priyanka'
+    elif num ==5:
+        name = 'Musk'
+    elif num==6:
+        name = 'Gal'
+    elif num==7:
+        name = 'Sandberg'
+    elif num==8:
+        name = 'Saina'
     return name
 
 
@@ -83,6 +107,12 @@ ReadImages(ModiImages,Modi,0)
 ReadImages(RagaImages,Raga,1)
 ReadImages(KohliImages,Kohli,2)
 ReadImages(SalmanImages,Salman,3)
+ReadImages(PriyankaImages,Priyanka,4)
+ReadImages(MuskImages,Musk,5)
+ReadImages(GalImages,Gal,6)
+ReadImages(SandbergImages,Sandberg,7)
+ReadImages(SainaImages,Saina,8)
+
 
 
 svm = NuSVC()
@@ -109,3 +139,6 @@ for image in TestImages:
     plt.figure()
     plt.imshow(cv2.cvtColor(img,cv2.COLOR_BGR2RGB))
     plt.title(num2name(pred))
+    
+    
+
