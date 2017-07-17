@@ -8,12 +8,15 @@ from os import listdir
 from os.path import isfile,join
 import numpy as np
 import cv2
-import tensorflow as tf
+#import tensorflow as tf
 import matplotlib.pyplot as plt
 import imutils
 import random
 #Function
-
+global trainFolder
+trainFolder = './data/' 
+global FolderName
+FolderNames =[]
 def add_noise(img):
     try:
         noise =np.random.normal(0,1,size=(img.shape))
@@ -28,44 +31,26 @@ def rotate_image(img):
     except AttributeError:
         rotImage = img 
     return rotImage 
+
+
+def augmentImages(name):
+    name = str(trainFolder) + str(name) +'/'
+    FolderNames.append(name)
+    #Images = [ f for f in listdir(name) if isfile(join(name,f)) ]
+    
 #Data Preparation
 
+augmentImages('Musk')
+augmentImages('Sandberg')
+augmentImages('RanveerS')
+augmentImages('Raga')
+augmentImages('Modi')
+augmentImages('Kohli')
+augmentImages('Salman')
+augmentImages('Obama')
+augmentImages('Priyanka')
 
-
-trainFolder = './data/' 
-
-Modi = trainFolder+'Modi/'
-Raga= trainFolder+'Raga/'
-Kohli= trainFolder+'Kohli/'
-Salman =  trainFolder+'Salman/'
-Gal = trainFolder +'Gal/'
-Musk =  trainFolder+'Musk/'
-Sandberg =  trainFolder+'Sandberg/'
-Salman =  trainFolder+'Salman/'
-Saina =  trainFolder+'Saina/'
-Priyanka =trainFolder+'Priyanka/'
-
-
-ModiImages = [ f for f in listdir(Modi) if isfile(join(Modi,f)) ]
-RagaImages = [ f for f in listdir(Raga) if isfile(join(Raga,f)) ]
-KohliImages = [ f for f in listdir(Kohli) if isfile(join(Kohli,f)) ]
-SalmanImages = [ f for f in listdir(Salman) if isfile(join(Salman,f)) ]
-SainaImages = [ f for f in listdir(Saina) if isfile(join(Saina,f)) ]
-SandbergImages = [ f for f in listdir(Sandberg) if isfile(join(Sandberg,f)) ]
-GalImages = [ f for f in listdir(Gal) if isfile(join(Gal,f)) ]
-MuskImages = [ f for f in listdir(Musk) if isfile(join(Musk,f)) ]
-PriyankaImages = [ f for f in listdir(Priyanka) if isfile(join(Priyanka,f)) ]
-
-
-Test = trainFolder +'Test/'
-trainData = []
-responseData = []
-testData = []
-NumberList = []
-
-FolderNames = [Modi,Raga,Kohli,Salman,Musk,Sandberg,Saina,Priyanka,Gal]
 k=0
-
 for folder in FolderNames:
     k=k+1
     for image in listdir(folder):
@@ -74,8 +59,15 @@ for folder in FolderNames:
         cv2.imwrite(str(folder)+'/Noised'+str(image),noisedImg)
         noisedImg2 =add_noise(img)
         cv2.imwrite(str(folder)+'/Noised2'+str(image),noisedImg2)
+        noisedImg3 =add_noise(img)
+        cv2.imwrite(str(folder)+'/Noised3'+str(image),noisedImg3)
         rotImage = rotate_image(img)
         cv2.imwrite(str(folder)+'/Rotated'+str(image),rotImage)
         rotImage2 = rotate_image(img)
         cv2.imwrite(str(folder)+'/Rotated2'+str(image),rotImage2)
+        rotImage3 = rotate_image(img)
+        cv2.imwrite(str(folder)+'/Rotated2'+str(image),rotImage3)
+
+
+
 
