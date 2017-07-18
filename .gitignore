@@ -10,6 +10,9 @@ __pycache__/
 *.jpeg
 *.png
 
+*.jpg\n*.jpeg\n*.png\n*.gif\n
+
+
 # Distribution / packaging
 .Python
 env/
