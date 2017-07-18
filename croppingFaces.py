@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 from sklearn.grid_search import GridSearchCV
 import os
 from time import sleep
+from skimage import data, color, exposure
 
 trainFolder = './data/' 
 
@@ -36,54 +37,52 @@ faceCount =0
 
 def ReadImages(ListName,FolderName):   
     for image in ListName:
-        face_cascade =cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-        img = cv2.imread(join(FolderName,image))
-        imgray = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
-        face = face_cascade.detectMultiScale(imgray,minSize = (50, 50)) #,scaleFactor = 1.15, minNeighbors = 5,
-        print(face)
-        if len(face)>0:
-            x, y, w, h =  face[0]
-            cv2.rectangle(imgray, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        else:
+#        face_cascade =cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+#        img = cv2.imread(join(FolderName,image))
+#        imgray = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
+#        face = face_cascade.detectMultiScale(imgray,minSize = (100, 100),scaleFactor = 1.25) #,scaleFactor = 1.15, minNeighbors = 5,
+#        print(face)
+#        if len(face)>0:
+#            x, y, w, h =  face[0]
+#            cv2.rectangle(imgray, (x, y), (x + w, y + h), (0, 255, 0), 2)
+#        else:
+#            pass
+#        cv2.imshow("Objects found", imgray)
+#        cv2.waitKey(100)
+#        sleep(0.3)
+#        cv2.destroyAllWindows()
+#        cv2.waitKey(1)
+#        cv2.waitKey(1)
+#        cv2.waitKey(1)
+#        cv2.waitKey(1) #bug in openCV linux
+        try:
+            image = cv2.imread(join(FolderName,image))
+            imgray = cv2.cvtColor(image,cv2.COLOR_RGB2GRAY)
+            face_cascade =cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+            face = face_cascade.detectMultiScale(imgray,minSize = (50, 50),scaleFactor = 1.25) 
+            if len(face)>0:
+                feature,hog_image= HOG(cv2.resize(imgray[face[0][1]:face[0][1]+face[0][3],face[0][0]:face[0][0]+face[0][2]],(100,100)),cells_per_block=(1, 1), visualise=True)                        
+                cropped_image=imgray[face[0][1]:face[0][1]+face[0][3],face[0][0]:face[0][0]+face[0][2]]
+                fig, (ax1, ax2) = plt.subplots(1, 2)
+                
+                ax1.axis('off')
+                ax1.imshow(cropped_image, cmap=plt.cm.gray)
+                ax1.set_title('Input image')
+                ax1.set_adjustable('box-forced')
+                
+                # Rescale histogram for better display
+                #hog_image_rescaled = exposure.rescale_intensity(hog_image, in_range=(0, 0.02))
+                
+                ax2.axis('off')
+                ax2.imshow(hog_image, cmap=plt.cm.gray)
+                ax2.set_title('Histogram of Oriented Gradients')
+                ax1.set_adjustable('box-forced')
+                plt.show()
+            else:
+                continue
+        except Exception as e:
+            print(e)
             pass
-        cv2.imshow("Objects found", imgray)
-        cv2.waitKey(100)
-        sleep(0.5)
-        cv2.destroyAllWindows()
 
-ReadImages(ModiImages,Modi)
+ReadImages(SalmanImages,Salman)
 
-
-
-import sys, cv2
-
-# Refactored https://realpython.com/blog/python/face-recognition-with-python/
-
-def detections_draw(image, detections):
-  for (x, y, w, h) in detections:
-    print "({0}, {1}, {2}, {3})".format(x, y, w, h)
-    cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-def main(argv = None):
-  if argv is None:
-    argv = sys.argv
-
-  cascade_path = sys.argv[1]
-  image_path = sys.argv[2]
-  result_path = sys.argv[3] if len(sys.argv) > 3 else None
-
-  cascade = cv2.CascadeClassifier(cascade_path)
-  image = cv2.imread(image_path)
-  if image is None:
-    print "ERROR: Image did not load."
-    return 2
-
-  detections = cascade_detect(cascade, image)
-  detections_draw(image, detections)
-
-  print "Found {0} objects!".format(len(detections))
-  if result_path is None:
-    cv2.imshow("Objects found", image)
-    cv2.waitKey(0)
-  else:
-    cv2.imwrite(result_path, image)

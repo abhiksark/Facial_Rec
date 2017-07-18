@@ -17,30 +17,34 @@ from os import listdir
 from os.path import isfile,join
 #from sklearn.grid_search import GridSearchCV
 import pandas as pd
+df = pd.read_csv("Faces.csv")
+Y = df[['Face']]
+print(Y)
 
+X=df.iloc[:,1:].values
+y=df.iloc[:,0:1].values
 #df = pd.DataFrame([X,y])
 #df.to_csv("faces.csv")
-imagesObj = inputPictures()
-imagesObj.takeInput('Modi',0)
-imagesObj.takeInput('Raga',1)
-#imagesObj.takeInput('Gal',2)
-imagesObj.takeInput('Kohli',3)
-imagesObj.takeInput('RanveerS',4)
-imagesObj.takeInput('Salman',5)
-imagesObj.takeInput('Musk',6)
-#imagesObj.takeInput('Sandberg',7)
-imagesObj.takeInput('Obama',8)
-imagesObj.takeInput('Priyanka',9)
-
+#imagesObj = inputPictures()
+#imagesObj.takeInput('Modi',0)
+#imagesObj.takeInput('Raga',1)
+##imagesObj.takeInput('Gal',2)
+#imagesObj.takeInput('Kohli',2)
+#imagesObj.takeInput('RanveerS',3)
+#imagesObj.takeInput('Salman',4)
+#imagesObj.takeInput('Musk',5)
+##imagesObj.takeInput('Sandberg',7)
+#imagesObj.takeInput('Obama',6)
+#imagesObj.takeInput('Priyanka',7)
+predDict={0:'Modi',1:'Raga',2:'Kohli',3:'RanveerS',4:'Salman',5:'Musk',6:'Obama',7:'Priyanka'}
 #imagesObj.takeInput('Saina',8)
-predDict = imagesObj.returnReverseName()
-X,y=imagesObj.returnTrainData()
+#predDict = imagesObj.returnReverseName()
+#X,y=imagesObj.returnTrainData()
 
 #y=np.array(y)
-#y=np.resize(y,(1327,1))
+#y=np.resize(y,(1326,1))
 #newX=np.asarray(X)
 #new=np.concatenate((y,newX), axis=1)
-#
 #df = pd.DataFrame(new)
 #df.to_csv("Faces.csv")
 
